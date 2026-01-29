@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale= 1.0">
+    <meta name="description" content="Minesweeper">
+    <meta name="author" content="M9GBR">
+    <link rel="shortcut icon" href="./imgs/flag.ico" type="image/x-icon">
+    <link rel="stylesheet" href="./styles/main.css" type="text/css">
+    <script src="./scripts/index.js" defer type="module"></script>
+    <title>Minesweeper</title>
+</head>
+
+<body>
+    <div id="load-wrap">Loading...</div>
+
+    <div id="confetti-wrap"></div>
+
+    <div id="header">
+        <div id="logo">MINESWEEPER</div>
+
+        <div id="menu-wrap">
+            <div id="menu-btn">
+                <input type="checkbox">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+
+            <div id="menu" class="hide-2"></div>
+        </div>
+    </div>
+
+    <div id="game-wrap">
+        <div id="game-header">
+            <div>
+                <button id="game-info-btn"></button>
+            </div>
+
+            <div id="flags-wrap" class="gh-info">
+                <div>0</div>
+            </div>
+
+            <div id="time-wrap" class="gh-info">
+                <div>0s</div>
+            </div>
+        </div>
+        <div id="canvas-wrap">
+            <canvas id="game-canvas" tabindex="0"></canvas>
+        </div>
+        <div id="game-footer">
+            <button id="opened-wrap">Null</button>
+        </div>
+    </div>
+
+    <dialog class="tab-wrap hide" closedby="none">
+        <div class="tab" id="confirm-tab">
+            <div id="confirm-body"></div>
+            <div id="ct-btns-wrap">
+                <button id="ct-ok-btn"></button>
+                <button id="ct-cancel-btn" class="cancel-btn"></button>
+            </div>
+        </div>
+    </dialog>
+
+    <dialog class='tab-wrap hide' closedby="none">
+        <div class="tab" id="new-game-tab" data-fsmode="0">
+            <div id="ngt-head">
+                <h2>New Game</h2>
+                <button class="cancel-btn"></button>
+            </div>
+            <div id="ngt-body">
+                <div id="top-wrap">
+                    <button title="Switch To Full Seed Mode"></button>
+
+                    <div id="presets-wrap">
+                        <button id="presets-btn" data-active="false">
+                            Presets
+                            <div id="presets-btn-triangle"></div>
+                        </button>
+                        <div id="presets-dropdown" class="hide-2"></div>
+                    </div>
+
+                    <button title="Info"></button>
+                </div>
+                <hr>
+                <div class="ngt-input-wrap">
+                    <label>
+                        <p>Rows</p>
+                        <input type="number" id="rows-input" class="ng-input">
+                    </label>
+                </div>
+                <div class="ngt-input-wrap">
+                    <label>
+                        <p>Columns</p>
+                        <input type="number" id="cols-input" class="ng-input">
+                    </label>
+                </div>
+                <div class="ngt-input-wrap">
+                    <label>
+                        <p>Mines</p>
+                        <input type="number" id="mines-input" class="ng-input">
+                    </label>
+                </div>
+                <div class="ngt-input-wrap" id="seed-input-wrap">
+                    <label>
+                        <p>Seed</p>
+                        <input type="text" id="seed-input" class="ng-input">
+                    </label>
+                    <button id="rand-seed-btn" title="Random Seed"></button>
+                </div>
+
+                <div id="ng-est-time" class="hide-2"></div>
+
+                <hr>
+
+                <div id="ngt-footer">
+                    <button id="create-btn">Create</button>
+                    <button id="preset-save-btn" title="Save Preset"></button>
+                </div>
+            </div>
+        </div>
+    </dialog>
+
+    <dialog class="tab-wrap hide" closedby="none">
+        <div class="tab" id="info-tab">
+            <div id="info-tab-head">
+                <button class="cancel-btn"></button>
+            </div>
+            <div id="info-tab-body">
+
+            </div>
+        </div>
+    </dialog>
+
+    <dialog class="tab-wrap hide" closedby="none">
+        <div id="wait-tab" class="tab">
+            <div class="wait-anim"></div>
+            <div id="wait-text-wrap">
+                <div id="wait-text"></div>
+                <div id="load-bar">
+                    <div></div>
+                </div>
+            </div>
+        </div>
+    </dialog>
+
+    <dialog class="tab-wrap hide" closedby="none">
+        <div id="stats-tab" class="tab">
+            <div id="stats-head">
+                <h2>Statistics</h2>
+                <button class="cancel-btn"></button>
+            </div>
+
+            <div id="stats-body">
+                <div id="stats-main">
+                    <button id="stats-gp">
+                        <div>Games Played</div>
+                        <div>0</div>
+                    </button>
+                    <button id="stats-gw">
+                        <div>Games Won</div>
+                        <div>0</div>
+                    </button>
+                    <button id="stats-gl">
+                        <div>Games Lost</div>
+                        <div>0</div>
+                    </button>
+                    <button id="stats-mastery">
+                        <div>Mastery Points</div>
+                        <div>0</div>
+                    </button>
+                </div>
+
+                <div id="stats-list" class="hide-2">
+                    <div id="sl-header">
+                        <button id="sl-back-btn"></button>
+
+                        <h4>Games Played</h4>
+
+                        <div id="sl-filter-wrap" data-active="0">
+                            <button>All</button>
+
+                            <div id="sl-filter-dropdown">
+                                <button>All</button>
+                                <button>Won</button>
+                                <button>Lost</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="sl-body">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th title="Rows">R</th>
+                                    <th title="Columns">C</th>
+                                    <th title="Mines">M</th>
+                                    <th title="Seed">S</th>
+                                    <th>Status</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <button id="clear-stats-btn">
+                <div>Clear Stats</div>
+            </button>
+        </div>
+    </dialog>
+
+    <dialog class="tab-wrap hide" closedby="none">
+        <div class="tab" id="game-end-tab">
+            <div id="get-status">
+                <h2></h2>
+                <p>+1.08 MP</p>
+            </div>
+            <div id="get-btns-wrap">
+                <button>Replay</button>
+                <button>Close</button>
+            </div>
+        </div>
+    </dialog>
+
+    <dialog class="tab-wrap hide" closedBy="none">
+        <div class="tab" id="settings-tab">
+            <div id="settings-head">
+                <h2>Settings</h2>
+                <button class="cancel-btn"></button>
+            </div>
+
+            <div id="settings-body">
+                <div class="set-sec" id="set-sec-display">
+                    <div id="theme-wrap">
+                        <p>Theme</p>
+                        <div id="theme-select">
+                            <button></button>
+                            <div id="theme-dropdown" class="hide-2">
+                                <button id="light-theme-btn" data-val="light">Light</button>
+                                <button id="dark-theme-btn" data-val="dark">Dark</button>
+                                <button id="sys-theme-btn" data-val="light dark">System</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="set-sec" id="set-sec-game">
+                    <div id="def-zoom-wrap">
+                        <p>Default Zoom</p>
+                        <div id="def-zoom-range-wrap" class="set-range">
+                            <p id="set-zoom-txt" class="hide-2">1.5x</p>
+                            <input type="range" id="zoom-input" min=".5" max="2" step=".125" value="0">
+                        </div>
+                    </div>
+
+                    <div id="nice-start-wrap">
+                        <label>
+                            <p>Nice Start</p>
+
+                            <div class="slider-toggle">
+                                <input type="checkbox">
+                                <div class="slider"></div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div id="saved-game-wrap">
+                        <label>
+                            <p>Always Continue Unfinished Games</p>
+
+                            <div class="slider-toggle right-input">
+                                <input type="checkbox">
+                                <div class="slider"></div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="set-sec" id="set-sec-input">
+                    <div id="sensitivity-wrap">
+                        <p>Scroll Sensitivity</p>
+
+                        <div id="sensitivity-range-wrap" class="set-range ">
+                            <p id="sensitivity-txt" class="hide-2">1</p>
+                            <input type="range" id="sensitivity-input" min="1" max="10" step="1">
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="set-sec" id="set-sec-audio">
+                    <div id="show-listener-wrap">
+                        <label>
+                            <p>Show Listener Position</p>
+
+                            <div class="slider-toggle">
+                                <input type="checkbox">
+                                <div class="slider"></div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div id="volume-wrap">
+                        <p>Volume</p>
+
+                        <div id="volume-range-wrap" class="set-range ">
+                            <p id="volume-txt" class="hide-2">1</p>
+                            <input type="range" id="volume-input" min="0" max="100" step="1">
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="set-sec" id="set-sec-clear">
+                    <button id="reset-btn">Reset To Default</button>
+                    <button id="clear-btn">Clear Game Data</button>
+                </div>
+            </div>
+        </div>
+    </dialog>
+
+    <div id="game-info-wrap">
+        <h2>Game Info:</h2>
+        <div id="gi-rows">
+            <p>Rows</p>
+            <p></p>
+        </div>
+        <div id="gi-cols">
+            <p>Columns</p>
+            <p></p>
+        </div>
+        <div id="gi-mines">
+            <p>Mines</p>
+            <p></p>
+        </div>
+        <div id="gi-seed">
+            <p>Seed</p>
+            <p class="selectable"></p>
+        </div>
+        <div id="gi-fs">
+            <p>Full Seed</p>
+            <p class="selectable"></p>
+        </div>
+        <div id="gi-time">
+            <p>Est. Time Range</p>
+            <p></p>
+        </div>
+        <div id="gi-date">
+            <p>Date Created</p>
+            <p></p>
+        </div>
+    </div>
+
+    <div id="preset-save-wrap">
+        <h2>Save Preset:</h2>
+        <div id="ps-rows">
+            <p>Rows</p>
+            <p></p>
+        </div>
+        <div id="ps-cols">
+            <p>Columns</p>
+            <p></p>
+        </div>
+        <div id="ps-mines">
+            <p>Mines</p>
+            <p></p>
+        </div>
+        <div id="ps-seed">
+            <p>Seed</p>
+            <p class="selectable"></p>
+        </div>
+        <div id="ps-name">
+            <label>
+                <p>Name</p>
+                <input id="ps-name-input" class="ng-input">
+            </label>
+        </div>
+        <button id="ps-save-btn" disabled>Save</button>
+    </div>
+
+    <div id="new-game-info-wrap">
+        <h2>Presets</h2>
+        <p>
+            Presets are an easy way to play custom games without having to input the game's properties (rows, columns,
+            mines and seed)
+            every single time. To create a preset, input the games properties in the appropriate fields and then click
+            the save button.
+            If the game is valid (has row & column values greater than 0 and the number of squares in the game are
+            greater than the number of mines),
+            the save button will be enabled. Then input the name of the preset and save it. You can now use the preset
+            by clicking the
+            Presets Button and selecting the preset by its name in the dropdown. <br>
+            To delete a preset right click the preset in the dropdown. There arw 3 default presets already added - Easy, Medium and Hard.
+        </p>
+
+        <h2>Full Seeds</h2>
+        <p>
+            A Full Seed is a string of characters that has both the game's seed and other of the game's properties combined. To create
+            a Full Seed, input the properties of the game in their respective fields 
+            and click the Full Seed Mode button, the seed will appear in the Full Seed input field.
+            Do this the opposite way and get the game's properties from the Full Seed.
+        </p>
+    </div>
+
+    <div id="about-game-wrap">
+        <h2>About Game</h2>
+        <p>
+            Minesweeper with seed functionality and more control over game creation.
+        </p>
+
+        <h2>How To Play</h2>
+        <ul>
+            <li>
+                Double click or double tap on a square to open or chord it.
+            </li>
+            <li>
+                Right click on a square or tap and hold it (on touch controls)
+                to flag or unflag it.
+            </li>
+            <li>
+                To toggle zoom states (zoom in, zoom out or no zooming) press the Control Key.
+                Pinch in or out to zoom in or out on touch devices.
+            </li>
+            <li>
+                Click and drag the mouse to move the game's view area around.
+                Scroll through the game area to move the game's view on touch devices.
+            </li>
+        </ul>
+
+        <p>
+            If you have noticed what seems to be a bug or want me to add additional features to the game feel free to
+            send me a message:
+        </p>
+
+        <div id="link-list">
+            <div>
+                <a href="mailto:megafumichael75@gmail.com" target="_blank">Gmail</a>
+            </div>
+            <div>
+                <a href="https://www.reddit.com/user/m9gbr/" target="_blank">Reddit</a>
+            </div>
+            <div>
+                <a href="https://web.facebook.com/just.michael.2026/" target="_blank">Facebook</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="mastery-points-info-wrap">
+        <p>
+            Mastery points are values gotten from games you have played. The more games you win, the more the value
+            increases and the
+            opposite happens if you lose games.
+        </p>
+    </div>
+</body>
+
+</html>
