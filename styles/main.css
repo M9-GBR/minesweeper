@@ -1,0 +1,236 @@
+@import "./game-wrap.css";
+@import "./tabs.css";
+@import "./fonts.css";
+
+:root {
+    --splash: light-dark(white, #444);
+    --blue-text: light-dark(#66f, #99f);
+    --red: light-dark(red, #f33);
+    --green: light-dark(green, #0f0);
+    --text: light-dark(black, #ccc);
+    --yellow: light-dark(#bb0, #ff0)
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    user-select: none;
+}
+
+.inactive {
+    interactivity: inert;
+}
+
+.selectable {
+    user-select: text;
+}
+
+.ctx-elem {
+    cursor: context-menu !important;
+}
+
+body {
+    background-color: light-dark(#eee, #333);
+    display: flex;
+    flex-direction: column;
+    font-family: ubuntu;
+    height: 100vh;
+    overflow: hidden;
+}
+
+button:not(:disabled) {
+    cursor: pointer;
+}
+
+button:focus,
+#menu-btn:has(input:focus) {
+    outline: 2px dashed #aaf;
+}
+
+#load-wrap {
+    display: flex;
+    position: fixed;
+    background-color: var(--splash);
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: bold;
+    color: var(--blue-text);
+    transition-property: opacity;
+    transition-duration: .5s;
+}
+
+button:disabled {
+    filter: grayscale();
+}
+
+.hide {
+    pointer-events: none;
+    opacity: 0;
+}
+
+.hide-2 {
+    pointer-events: none;
+    display: none !important;
+}
+
+#header {
+    background-color: var(--splash);
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 10px;
+    position: sticky;
+    top: 0;
+    transition: .3s ease-out;
+}
+
+.hide-up {
+    translate: 0 -100%;
+}
+
+#logo {
+    font-weight: bold;
+    font-size: 23px;
+    margin: auto 0;
+    color: var(--blue-text);
+}
+
+#menu-wrap {
+    position: relative;
+}
+
+#menu-btn {
+    width: 30px;
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#menu-btn input {
+    cursor: pointer;
+    width: 30px;
+    aspect-ratio: 1;
+    opacity: 0;
+    position: absolute;
+}
+
+#menu-btn div {
+    width: 100%;
+    height: 20%;
+    background-color: var(--text);
+    pointer-events: none;
+    transition: .3s ease-out;
+    transform-origin: 50% 50%;
+}
+
+#menu-btn:has(input:checked) div:first-of-type {
+    translate: 0 200%;
+    rotate: 45deg;
+    background-color: red;
+}
+
+#menu-btn:has(input:checked) div:nth-of-type(2) {
+    opacity: 0;
+}
+
+#menu-btn:has(input:checked) div:last-of-type {
+    translate: 0 -200%;
+    rotate: -45deg;
+    background-color: red;
+}
+
+#menu,
+#presets-dropdown,
+#sl-filter-dropdown {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--splash);
+    min-width: 150px;
+    box-shadow: 0 0 5px black;
+    border-radius: 3px;
+    padding: 5px 0;
+    z-index: 1000;
+}
+
+#menu {
+    margin-top: 5px;
+    right: calc(100% - 30px);
+}
+
+.menu-item {
+    display: flex;
+    padding: 10px 5px;
+    border: none;
+    background-color: transparent;
+    font-size: 15px;
+    max-height: 40px;
+    font-family: ubuntu medium;
+    color: var(--text);
+}
+
+.menu-item:hover,
+.pd-item:hover {
+    background-color: light-dark(#eef, #333);
+}
+
+.menu-item svg {
+    width: 30px;
+    fill: #66f;
+}
+
+.menu-item div {
+    margin: auto 0;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #66f;
+}
+
+#confetti-wrap {
+    position: fixed;
+    z-index: 1;
+}
+
+.confetti {
+    height: 10px;
+    position: absolute;
+}
+
+input[type="range"] {
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+input[type="range"]:focus {
+    outline: none;
+}
+
+input[type="range"]:focus::-webkit-slider-thumb {
+    outline: 2px dashed #aaf;
+    outline-offset: 2px;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    background-color: light-dark(#ddd, #555);
+    height: 5px;
+    border-radius: 10000px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    height: 20px;
+    width: 20px;
+    background-color: var(--blue-text);
+    margin-top: -7.5px;
+    border-radius: 100%;
+}
